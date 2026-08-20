@@ -187,7 +187,7 @@ namespace XNodeEditor {
 
         [OnOpenAsset(0)]
         public static bool OnOpen(EntityId entityId, int line) {
-            XNode.NodeGraph nodeGraph = EditorUtility.EntityIDToObject(entityId) as XNode.NodeGraph;
+            XNode.NodeGraph nodeGraph = EditorUtility.EntityIdToObject(entityId) as XNode.NodeGraph;
             if (nodeGraph != null) {
                 Open(nodeGraph);
                 return true;
