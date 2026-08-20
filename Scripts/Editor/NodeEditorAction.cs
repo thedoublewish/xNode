@@ -351,16 +351,29 @@ namespace XNodeEditor
                     }
                     else if (e.button == 1 || e.button == 2)
                     {
-                        if (true)
+                        if (!isPanning)
                         {
                             if (IsDraggingPort)
                             {
-                                draggedOutputReroutes.Add(WindowToGridPosition(e.mousePosition));
+                                draggedOutputReroutes.Add(
+                                    WindowToGridPosition(e.mousePosition)
+                                );
                             }
-                            else if (currentActivity == NodeActivity.DragNode && Selection.activeObject == null && selectedReroutes.Count == 1)
+                            else if (
+                                currentActivity == NodeActivity.DragNode &&
+                                Selection.activeObject == null &&
+                                selectedReroutes.Count == 1
+                            )
                             {
-                                selectedReroutes[0].InsertPoint(selectedReroutes[0].GetPoint());
-                                selectedReroutes[0] = new RerouteReference(selectedReroutes[0].port, selectedReroutes[0].connectionIndex, selectedReroutes[0].pointIndex + 1);
+                                selectedReroutes[0].InsertPoint(
+                                    selectedReroutes[0].GetPoint()
+                                );
+
+                                selectedReroutes[0] = new RerouteReference(
+                                    selectedReroutes[0].port,
+                                    selectedReroutes[0].connectionIndex,
+                                    selectedReroutes[0].pointIndex + 1
+                                );
                             }
                             else if (IsHoveringReroute)
                             {
@@ -372,26 +385,32 @@ namespace XNodeEditor
                             }
                             else if (IsHoveringNode && IsHoveringTitle(hoveredNode))
                             {
-                                if (!Selection.Contains(hoveredNode)) SelectNode(hoveredNode, false);
+                                if (!Selection.Contains(hoveredNode))
+                                {
+                                    SelectNode(hoveredNode, false);
+                                }
+
                                 autoConnectOutput = null;
+
                                 GenericMenu menu = new GenericMenu();
-                                NodeEditor.GetEditor(hoveredNode, this).AddContextMenuItems(menu);
-                                menu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
-                                e.Use(); // Fixes copy/paste context menu appearing in Unity 5.6.6f2 - doesn't occur in 2018.3.2f1 Probably needs to be used in other places.
-                            }
-                            else if (!IsHoveringNode)
-                            {
-                                Debug.Log("xNode empty-grid right click detected");
+                                NodeEditor
+                                    .GetEditor(hoveredNode, this)
+                                    .AddContextMenuItems(menu);
 
-                                autoConnectOutput = null;
-
-                                UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
-                                graphEditor.AddContextMenuItems(menu);
-                                menu.ShowAsContext();
+                                menu.DropDown(
+                                    new Rect(
+                                        Event.current.mousePosition,
+                                        Vector2.zero
+                                    )
+                                );
 
                                 e.Use();
                             }
+
+                            // Empty-grid right click is intentionally NOT handled here.
+                            // Unity 6.5 uses the EventType.ContextClick handler instead.
                         }
+
                         isPanning = false;
                     }
                     // Reset DoubleClick
